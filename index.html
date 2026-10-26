@@ -613,48 +613,30 @@
   }
 
   function handleFormSubmit(e) {
-    e.preventDefault();
-    const btn = document.getElementById('btnSubmit');
-
     if (!currentDept) {
+      e.preventDefault();
       alert("Vui lòng chọn khối của bạn (Tổng đài hoặc Success) ở phần đầu form!");
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 
+    const btn = document.getElementById('btnSubmit');
     btn.disabled = true;
-    btn.innerText = "Đang lưu câu trả lời vào Google Sheet...";
+    btn.innerText = "Đang gửi dữ liệu...";
 
-    // Chuyển FormData sang URLSearchParams để Google Apps Script luôn đọc được 100%
-    const formData = new FormData(e.target);
-    const searchParams = new URLSearchParams();
-    for (const [key, value] of formData.entries()) {
-      searchParams.append(key, value);
-    }
-
-    fetch(GOOGLE_SCRIPT_URL, {
-      method: "POST",
-      body: searchParams,
-      mode: "no-cors"
-    })
-    .then(() => {
+    // Đợi 1.5 giây để form bắn dữ liệu vào iframe sang Google Sheet
+    setTimeout(() => {
       alert("Khảo sát đã gửi thành công! Dữ liệu đã được lưu vào Google Sheet.");
-      e.target.reset();
+      document.getElementById('surveyForm').reset();
       const placeholder = document.getElementById('b-placeholder');
       if (placeholder) placeholder.classList.remove('hidden');
       document.getElementById('section-b-tongdai').classList.add('hidden');
       document.getElementById('section-b-success').classList.add('hidden');
       currentDept = "";
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    })
-    .catch(err => {
-      console.error(err);
-      alert("Có lỗi kết nối khi gửi dữ liệu, vui lòng thử lại!");
-    })
-    .finally(() => {
       btn.disabled = false;
       btn.innerText = "Gửi Khảo Sát";
-    });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 1500);
   }
 </script>
 </body>
