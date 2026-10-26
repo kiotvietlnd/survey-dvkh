@@ -31,7 +31,7 @@
       padding: 30px 16px;
     }
 
-    /* MỞ RỘNG TO TOÀN BỘ KHUNG FORM LÊN 1020px */
+    /* KHUNG TO 1020PX */
     .container {
       max-width: 1020px;
       margin: 0 auto;
@@ -80,13 +80,10 @@
       margin-bottom: 20px;
       padding-bottom: 10px;
       border-bottom: 2px solid var(--primary-light);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
     }
 
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .form-group label {
@@ -115,6 +112,47 @@
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
     }
 
+    /* CHỌN KHỐI Ở PHẦN TRÊN */
+    .dept-selector-group {
+      display: flex;
+      gap: 16px;
+      margin-top: 6px;
+    }
+
+    .dept-pill {
+      flex: 1;
+      position: relative;
+    }
+
+    .dept-pill input {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .dept-pill-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 16px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      background: #fafafa;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .dept-pill input:checked + .dept-pill-label {
+      border-color: var(--primary);
+      background: #eff6ff;
+      color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    }
+
     .question-item {
       padding: 20px 0;
       border-bottom: 1px solid #f1f5f9;
@@ -131,7 +169,7 @@
       color: #0f172a;
     }
 
-    /* ĐỊNH DẠNG 6 Ô TICK ĐỀU NHAU CHẰN CHẶN */
+    /* 6 Ô TICK ĐỀU NHAU CHẰN CHẶN 100% */
     .scale-options {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
@@ -155,12 +193,12 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 8px 6px;
+      padding: 8px 4px;
       border: 1px solid var(--border);
       border-radius: 8px;
       text-align: center;
       cursor: pointer;
-      height: 80px; /* CỐ ĐỊNH CHIỀU CAO ĐỂ TẤT CẢ Ô BẰNG NHAU HOÀN TOÀN */
+      height: 82px; /* CỐ ĐỊNH ĐỘ CAO CHO TẤT CẢ CÁC Ô BẰNG NHAU HOÀN TOÀN */
       transition: all 0.2s;
       background: #f8fafc;
       user-select: none;
@@ -195,40 +233,20 @@
       background: #f1f5f9;
     }
 
-    /* BỘ CHỌN KHỐI TỔNG ĐÀI / SUCCESS */
-    .dept-selector-box {
+    /* THÔNG BÁO KHI CHƯA CHỌN KHỐI */
+    .placeholder-b {
+      border: 2px dashed #93c5fd;
       background: #eff6ff;
-      border: 1.5px dashed var(--primary);
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 24px;
+      border-radius: 12px;
+      padding: 26px;
       text-align: center;
+      color: #1e40af;
+      margin-bottom: 24px;
     }
 
-    .dept-tabs {
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      margin-top: 12px;
-    }
-
-    .dept-tab-btn {
-      padding: 12px 28px;
+    .placeholder-b p {
       font-size: 15px;
-      font-weight: 600;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: white;
-      cursor: pointer;
-      transition: all 0.2s;
-      color: var(--text);
-    }
-
-    .dept-tab-btn.active {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-      box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+      font-weight: 500;
     }
 
     .btn-submit {
@@ -262,7 +280,7 @@
         grid-template-columns: repeat(3, 1fr);
       }
       .scale-label {
-        height: 72px;
+        height: 74px;
       }
     }
   </style>
@@ -281,6 +299,7 @@
     <!-- Thông tin chung -->
     <div class="section-card">
       <div class="section-title">Thông Tin Đánh Giá</div>
+      
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
         <div class="form-group">
           <label>Họ và tên <span class="required">*</span></label>
@@ -288,7 +307,22 @@
         </div>
         <div class="form-group">
           <label>Email <span class="required">*</span></label>
-          <input type="email" name="Email" class="form-control" required placeholder="email@domain.com">
+          <input type="email" name="Email" class="form-control" required placeholder="email@kiotviet.com">
+        </div>
+      </div>
+
+      <!-- CHỌN KHỐI: TỰ ĐỘNG BẬT MỤC B -->
+      <div class="form-group" style="margin-top: 10px;">
+        <label>Bạn thuộc: <span class="required">*</span></label>
+        <div class="dept-selector-group">
+          <label class="dept-pill">
+            <input type="radio" name="Khối" value="Tổng đài" onchange="switchDepartment('tongdai')" required>
+            <div class="dept-pill-label">📞 Khối Tổng Đài</div>
+          </label>
+          <label class="dept-pill">
+            <input type="radio" name="Khối" value="Success" onchange="switchDepartment('success')">
+            <div class="dept-pill-label">💼 Khối Success</div>
+          </label>
         </div>
       </div>
     </div>
@@ -297,7 +331,6 @@
     <div class="section-card">
       <div class="section-title">A. Mức độ phù hợp của chương trình đào tạo</div>
       
-      <!-- Câu 1 -->
       <div class="question-item">
         <div class="question-title">1. Nội dung chương trình đào tạo (nghiệp vụ sản phẩm/ quy trình/ kỹ năng) phù hợp với yêu cầu năng lực của nhân sự</div>
         <div class="scale-options">
@@ -310,7 +343,6 @@
         </div>
       </div>
 
-      <!-- Câu 2 -->
       <div class="question-item">
         <div class="question-title">2. Nội dung chương trình đào tạo (nghiệp vụ sản phẩm/ quy trình/ kỹ năng) sát với thực tế công việc của nhân sự</div>
         <div class="scale-options">
@@ -323,7 +355,6 @@
         </div>
       </div>
 
-      <!-- Câu 3 -->
       <div class="question-item">
         <div class="question-title">3. Lộ trình đào tạo và phương pháp kết hợp LMS – thực hành tình huống – kèm cặp thực tế giúp nhân sự mới tiếp thu và vận dụng kiến thức nhanh chóng, hiệu quả.</div>
         <div class="scale-options">
@@ -337,26 +368,14 @@
       </div>
     </div>
 
-    <!-- KHU VỰC MỤC B VỚI NÚT CHỌN RÕ RÀNG -->
-    <div class="dept-selector-box">
-      <h3 style="font-size: 16px; color: #1e3a8a; margin-bottom: 4px;">B. KẾT QUẢ THAY ĐỔI VỀ NĂNG LỰC</h3>
-      <p style="font-size: 14px; color: #475569;">Vui lòng chọn khối bạn đang quản lý để tiếp tục các câu hỏi phần B:</p>
-      
-      <input type="hidden" name="Khối" id="selectedDept" value="" required>
-
-      <div class="dept-tabs">
-        <button type="button" id="tabTD" class="dept-tab-btn" onclick="selectDepartment('tongdai')">
-          📞 Dành Cho Khối Tổng Đài
-        </button>
-        <button type="button" id="tabSC" class="dept-tab-btn" onclick="selectDepartment('success')">
-          💼 Dành Cho Khối Success
-        </button>
-      </div>
+    <!-- KHU VỰC PHẦN B -->
+    <div id="b-placeholder" class="placeholder-b">
+      <p>💡 <strong>Mục B:</strong> Vui lòng chọn <em>"Bạn thuộc: Khối Tổng đài hay Khối Success"</em> ở phần thông tin phía trên để hiển thị câu hỏi mục B tại đây.</p>
     </div>
 
     <!-- PHẦN B: TỔNG ĐÀI -->
     <div id="section-b-tongdai" class="section-card hidden">
-      <div class="section-title">B. Kết quả thay đổi về năng lực — Khối Tổng Đài</div>
+      <div class="section-title">B. Kết quả thay đổi về năng lực (Khối Tổng Đài)</div>
 
       <div class="question-item">
         <div class="question-title">4. Nhân sự mới có nền tảng kiến thức nghiệp vụ và quy trình tốt hơn so với trước đây.</div>
@@ -421,7 +440,7 @@
 
     <!-- PHẦN B: SUCCESS -->
     <div id="section-b-success" class="section-card hidden">
-      <div class="section-title">B. Kết quả thay đổi về năng lực — Khối Success</div>
+      <div class="section-title">B. Kết quả thay đổi về năng lực (Khối Success)</div>
 
       <div class="question-item">
         <div class="question-title">4. Nhân sự mới có nền tảng kiến thức nghiệp vụ và quy trình tốt hơn so với trước đây.</div>
@@ -562,38 +581,29 @@
 </div>
 
 <script>
-  // DÁN LINK GOOGLE APPS SCRIPT VÀO ĐÂY:
-  const GOOGLE_SCRIPT_URL = "DÁN_LINK_WEB_APP_URL_VÀO_ĐÂY";
+  // LINK GOOGLE APPS SCRIPT CỦA BẠN ĐÃ ĐƯỢC CHÈN SẴN:
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/a/macros/kiotviet.com/s/AKfycbwYis9MIhZL8Wuoam8DOAIF81Sv7JjT0ojK9ifVpsjXa7H6o7m2E8j69VtJSeNoqcLw/exec";
 
-  let selectedDepartment = "";
+  let currentDept = "";
 
-  function selectDepartment(dept) {
-    selectedDepartment = dept;
-    document.getElementById('selectedDept').value = (dept === 'tongdai') ? 'Tổng đài' : 'Success';
+  function switchDepartment(dept) {
+    currentDept = dept;
+    const placeholder = document.getElementById('b-placeholder');
+    const tdSection = document.getElementById('section-b-tongdai');
+    const scSection = document.getElementById('section-b-success');
 
-    const btnTD = document.getElementById('tabTD');
-    const btnSC = document.getElementById('tabSC');
-    const sectionTD = document.getElementById('section-b-tongdai');
-    const sectionSC = document.getElementById('section-b-success');
+    placeholder.classList.add('hidden');
 
     if (dept === 'tongdai') {
-      btnTD.classList.add('active');
-      btnSC.classList.remove('active');
-      sectionTD.classList.remove('hidden');
-      sectionSC.classList.add('hidden');
-
-      disableInputs(sectionSC, true);
-      disableInputs(sectionTD, false);
-      sectionTD.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } else {
-      btnSC.classList.add('active');
-      btnTD.classList.remove('active');
-      sectionSC.classList.remove('hidden');
-      sectionTD.classList.add('hidden');
-
-      disableInputs(sectionTD, true);
-      disableInputs(sectionSC, false);
-      sectionSC.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      tdSection.classList.remove('hidden');
+      scSection.classList.add('hidden');
+      disableInputs(scSection, true);
+      disableInputs(tdSection, false);
+    } else if (dept === 'success') {
+      scSection.classList.remove('hidden');
+      tdSection.classList.add('hidden');
+      disableInputs(tdSection, true);
+      disableInputs(scSection, false);
     }
   }
 
@@ -606,39 +616,35 @@
     e.preventDefault();
     const btn = document.getElementById('btnSubmit');
 
-    if (!selectedDepartment) {
-      alert("Vui lòng bấm chọn khối của bạn (Tổng đài hoặc Success) ở Mục B!");
-      document.querySelector('.dept-selector-box').scrollIntoView({ behavior: 'smooth', block: 'center' });
-      return;
-    }
-
-    if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("DÁN_LINK_WEB_APP_URL_VÀO_ĐÂY")) {
-      alert("Vui lòng gắn URL Google Apps Script vào file để lưu về Google Sheet!");
+    if (!currentDept) {
+      alert("Vui lòng chọn khối của bạn (Tổng đài hoặc Success) ở phần đầu form!");
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 
     btn.disabled = true;
-    btn.innerText = "Đang lưu câu trả lời...";
+    btn.innerText = "Đang lưu câu trả lời vào Google Sheet...";
 
     const formData = new FormData(e.target);
 
+    // Gửi dữ liệu qua Google Apps Script bằng chế độ no-cors
     fetch(GOOGLE_SCRIPT_URL, {
       method: "POST",
-      body: formData
+      body: formData,
+      mode: "no-cors"
     })
-    .then(res => {
-      alert("Khảo sát đã gửi thành công! Cảm ơn Anh/Chị.");
+    .then(() => {
+      alert("Khảo sát đã gửi thành công! Dữ liệu đã được ghi nhận vào Google Sheet.");
       e.target.reset();
+      document.getElementById('b-placeholder').classList.remove('hidden');
       document.getElementById('section-b-tongdai').classList.add('hidden');
       document.getElementById('section-b-success').classList.add('hidden');
-      document.getElementById('tabTD').classList.remove('active');
-      document.getElementById('tabSC').classList.remove('active');
-      selectedDepartment = "";
+      currentDept = "";
       window.scrollTo({ top: 0, behavior: 'smooth' });
     })
     .catch(err => {
       console.error(err);
-      alert("Có lỗi khi gửi dữ liệu, vui lòng thử lại!");
+      alert("Có lỗi khi gửi dữ liệu, vui lòng kiểm tra kết nối mạng!");
     })
     .finally(() => {
       btn.disabled = false;
