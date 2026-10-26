@@ -581,7 +581,6 @@
 </div>
 
 <script>
-  // LINK GOOGLE APPS SCRIPT CỦA BẠN ĐÃ ĐƯỢC CHÈN SẴN:
   const GOOGLE_SCRIPT_URL = "https://script.google.com/a/macros/kiotviet.com/s/AKfycbwYis9MIhZL8Wuoam8DOAIF81Sv7JjT0ojK9ifVpsjXa7H6o7m2E8j69VtJSeNoqcLw/exec";
 
   let currentDept = "";
@@ -592,7 +591,7 @@
     const tdSection = document.getElementById('section-b-tongdai');
     const scSection = document.getElementById('section-b-success');
 
-    placeholder.classList.add('hidden');
+    if (placeholder) placeholder.classList.add('hidden');
 
     if (dept === 'tongdai') {
       tdSection.classList.remove('hidden');
@@ -608,7 +607,7 @@
   }
 
   function disableInputs(container, status) {
-    const inputs = container.querySelectorAll('input');
+    const inputs = container.querySelectorAll('input, textarea');
     inputs.forEach(input => input.disabled = status);
   }
 
@@ -625,18 +624,23 @@
     btn.disabled = true;
     btn.innerText = "Đang lưu câu trả lời vào Google Sheet...";
 
+    // Chuyển FormData sang URLSearchParams để Google Apps Script luôn đọc được 100%
     const formData = new FormData(e.target);
+    const searchParams = new URLSearchParams();
+    for (const [key, value] of formData.entries()) {
+      searchParams.append(key, value);
+    }
 
-    // Gửi dữ liệu qua Google Apps Script bằng chế độ no-cors
     fetch(GOOGLE_SCRIPT_URL, {
       method: "POST",
-      body: formData,
+      body: searchParams,
       mode: "no-cors"
     })
     .then(() => {
-      alert("Khảo sát đã gửi thành công! Dữ liệu đã được ghi nhận vào Google Sheet.");
+      alert("Khảo sát đã gửi thành công! Dữ liệu đã được lưu vào Google Sheet.");
       e.target.reset();
-      document.getElementById('b-placeholder').classList.remove('hidden');
+      const placeholder = document.getElementById('b-placeholder');
+      if (placeholder) placeholder.classList.remove('hidden');
       document.getElementById('section-b-tongdai').classList.add('hidden');
       document.getElementById('section-b-success').classList.add('hidden');
       currentDept = "";
@@ -644,7 +648,7 @@
     })
     .catch(err => {
       console.error(err);
-      alert("Có lỗi khi gửi dữ liệu, vui lòng kiểm tra kết nối mạng!");
+      alert("Có lỗi kết nối khi gửi dữ liệu, vui lòng thử lại!");
     })
     .finally(() => {
       btn.disabled = false;
@@ -652,6 +656,5 @@
     });
   }
 </script>
-
 </body>
 </html>
